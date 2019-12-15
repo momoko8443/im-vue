@@ -12,10 +12,11 @@
           <Header></Header>
         </a-layout-header>
         <a-layout-content>
-          <ConversationView></ConversationView>
+          <ConversationView v-if="hasCurrentTarget"></ConversationView>
+          <!-- <Welcome v-else></Welcome> -->
         </a-layout-content>
         <a-layout-footer>
-          <MessageInputer></MessageInputer>
+          <MessageInputer v-if="hasCurrentTarget"></MessageInputer>
         </a-layout-footer>
       </a-layout>
     </a-layout>
@@ -27,24 +28,29 @@ import TargetsList from '@/components/TargetsList';
 import Header from '@/components/Header';
 import MessageInputer from '@/components/MessageInputer';
 import ConversationView from '@/components/ConversationView';
+import Welcome from '@/components/Welcome';
 import { mapGetters } from 'vuex';
 export default {
   components:{
     TargetsList,
     MessageInputer,
     Header,
-    ConversationView
+    ConversationView,
+    Welcome
   },
   mounted(){
     //console.log(JSON.stringify(Vue.currentUser));
   },
   computed:{
-    ...mapGetters(['getFriends','getGroups']),
+    ...mapGetters(['getFriends','getGroups','getCurrentTarget']),
     friendsList(){
       return this.getFriends;
     },
     groupsList(){
       return this.getGroups;
+    },
+    hasCurrentTarget(){
+      return this.getCurrentTarget.name ? true: false;
     }
   }
 }

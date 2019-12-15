@@ -7,8 +7,8 @@
     </div>
 </template>
 <script>
-import messageService from '@/services/messageService';
 import Vue from 'vue';
+import { mapActions } from 'vuex';
 export default {
     data(){
         return {
@@ -16,13 +16,13 @@ export default {
         }
     },
     methods:{
-        sendMessage(){
+        ...mapActions(['sendMessage']),
+        send(){
             if(this.content){
-                const from = Vue.currentUser.username;
-                const to = Vue.currentTarget.name;
-                messageService.sendMessage(from,to,this.content).then((result)=>{
+                this.sendMessage(this.content).then(()=>{
+                    alert();
+                })
 
-                });
             }
         }
     }
