@@ -35,7 +35,7 @@ function markHasRead(me, target){
 }
 
 function loadHistoryMessages(me, target){
-    return axios.get('/api/message',{
+    return axios.get('/api/messages',{
         params:{
             from:target,
             to: me

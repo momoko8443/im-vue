@@ -29,7 +29,7 @@ import Header from '@/components/Header';
 import MessageInputer from '@/components/MessageInputer';
 import ConversationView from '@/components/ConversationView';
 import Welcome from '@/components/Welcome';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 export default {
   components:{
     TargetsList,
@@ -51,6 +51,20 @@ export default {
     },
     hasCurrentTarget(){
       return this.getCurrentTarget.name ? true: false;
+    }
+  },
+  methods:{
+    ...mapActions(['loadMessages'])
+  },
+  mounted(){
+
+    
+  },
+  watch:{
+    hasCurrentTarget(val){
+      if(val){
+        this.loadMessages();
+      }
     }
   }
 }

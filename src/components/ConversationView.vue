@@ -1,7 +1,7 @@
 <template>
     <div class="vbox">
         <h3 class="talkTo">{{talkWithWho}}</h3>
-        <MessageItem v-for="msg in messages" :key="msg.time" :message="msg"></MessageItem>
+        <MessageItem v-for="msg in getCurrentMessages" :key="msg.time" :message="msg"></MessageItem>
     </div>
 </template>
 <script>
@@ -11,11 +11,11 @@ export default {
     components:{
         MessageItem
     },
-    props:{
-        messages:Array
-    },
+    // props:{
+    //     messages:Array
+    // },
     computed:{
-        ...mapGetters(['getCurrentTarget']),
+        ...mapGetters(['getCurrentTarget','getCurrentMessages']),
         talkWithWho(){
             if(this.getCurrentTarget.name){
                 return 'Conversation with ' + this.getCurrentTarget.name;
