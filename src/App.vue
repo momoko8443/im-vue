@@ -55,6 +55,9 @@ html body{
 }
 .talkTo{
     color: gray;
+    text-align: left;
+    padding-left: 10px;
+    background: bisque;
 }
 .welcome{
   color: grep;

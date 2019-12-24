@@ -6,7 +6,6 @@
     </div>
 </template>
 <script>
-import Vue from 'vue';
 import TargetItem from '@/components/TargetItem';
 import { mapActions, mapGetters } from 'vuex';
 export default {

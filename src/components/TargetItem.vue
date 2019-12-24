@@ -4,14 +4,15 @@
     </div>
 </template>
 <script>
-import Vue from 'vue';
+import { mapGetters } from 'vuex';
 export default {
     props:{
         target:String
     },
     computed:{
+        ...mapGetters(['getCurrentUsername']),
         isActive(){
-            //return this.target === Vue. .name; 
+            return this.target === this.getCurrentUsername; 
         }
     }
 }

@@ -7,7 +7,6 @@
     </div>
 </template>
 <script>
-import Vue from 'vue';
 import { mapActions } from 'vuex';
 export default {
     data(){
@@ -21,6 +20,7 @@ export default {
             if(this.content){
                 this.sendMessage(this.content).then(()=>{
                     this.content = '';
+                    this.$emit('sendMessageSuccess');
                 })
 
             }

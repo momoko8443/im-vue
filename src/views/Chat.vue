@@ -11,24 +11,23 @@
         <a-layout-header>
           <Header></Header>
         </a-layout-header>
-        <a-layout-content>
+        <a-layout-content class="conversationView" ref="conversationView">
           <ConversationView v-if="hasCurrentTarget"></ConversationView>
           <!-- <Welcome v-else></Welcome> -->
         </a-layout-content>
         <a-layout-footer>
-          <MessageInputer v-if="hasCurrentTarget"></MessageInputer>
+          <MessageInputer v-if="hasCurrentTarget" @sendMessageSuccess="sendMessageSuccessHandler"></MessageInputer>
         </a-layout-footer>
       </a-layout>
     </a-layout>
   </div>
 </template>
 <script>
-import Vue from 'vue';
+//import Vue from 'vue';
 import TargetsList from '@/components/TargetsList';
 import Header from '@/components/Header';
 import MessageInputer from '@/components/MessageInputer';
 import ConversationView from '@/components/ConversationView';
-import Welcome from '@/components/Welcome';
 import { mapGetters, mapActions } from 'vuex';
 export default {
   components:{
@@ -36,10 +35,23 @@ export default {
     MessageInputer,
     Header,
     ConversationView,
-    Welcome
   },
   mounted(){
     //console.log(JSON.stringify(Vue.currentUser));
+    let vm = this;
+    this.$socket.on('unreadMessage',(data)=>{
+        //loadUnreadMessagesToMe();
+        //console.log(JSON.stringify(data));
+        vm.receiveMessage(data);
+        //markHasRead(data.from,data.to);
+        // setTimeout(()=>{
+          
+        // },500);
+        vm.$nextTick(()=>{
+          vm.$refs['conversationView'].$el.scrollTop = vm.$refs['conversationView'].$el.clientHeight + 100;
+        });
+        
+    });
   },
   computed:{
     ...mapGetters(['getFriends','getGroups','getCurrentTarget']),
@@ -54,11 +66,12 @@ export default {
     }
   },
   methods:{
-    ...mapActions(['loadMessages'])
-  },
-  mounted(){
-
-    
+    ...mapActions(['loadMessages','receiveMessage']),
+    sendMessageSuccessHandler(){
+      this.$nextTick(()=>{
+          this.$refs['conversationView'].$el.scrollTop = this.$refs['conversationView'].$el.clientHeight + 100;
+        });
+    }
   },
   watch:{
     hasCurrentTarget(val){
@@ -77,5 +90,8 @@ export default {
   font-size: 32px;
   padding-top:60px;
   color:violet;
+}
+.conversationView{
+  overflow: auto;
 }
 </style>

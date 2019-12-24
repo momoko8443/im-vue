@@ -18,7 +18,7 @@ export default {
         ...mapGetters(['getCurrentTarget','getCurrentMessages']),
         talkWithWho(){
             if(this.getCurrentTarget.name){
-                return 'Conversation with ' + this.getCurrentTarget.name;
+                return this.getCurrentTarget.name;
             }
             return '';
             

@@ -1,22 +1,24 @@
 import messageService from '@/services/messageService';
-
+import Vue from 'vue';
 export default {
     state:{
-        messagesPool:{}
+        messagesPool:{},
+        currentMessages:[]
     },
 
     getters:{
-        getCurrentMessages:(state,rootState)=>{
-            let target = rootState.user.currentTarget.name;
-            if(!state.messagesPool[target]){
-                state.messagesPool[target] = [];
-            }
-            return state.messagesPool[target];
+        getCurrentMessages:(state,getters,rootState,rootGetters)=>{
+            return state.currentMessages;
         },
        
     },
 
     actions:{
+        receiveMessage({commit, rootState}, content){
+            //let from = rootState.user.currentUser.username;
+            let to = rootState.user.currentTarget.name;
+            commit('appendMessagesMutation',{target:to,messages:[content]});
+        },
         sendMessage({commit,rootState}, content){
             let from = rootState.user.currentUser.username;
             let to = rootState.user.currentTarget.name;
@@ -28,29 +30,52 @@ export default {
                 }          
             })
         },
-        loadMessages({commit,rootState}){
+        loadMessages({state,commit,rootState}){
             let from = rootState.user.currentUser.username;
             let to = rootState.user.currentTarget.name;
-            Promise.all([
-                messageService.loadHistoryMessages(from,to),
-                messageService.loadUnreadMessagesFromMe(from, to),
-                messageService.loadUnreadMessagesToMe(from, to)
-            ]).then((result)=>{
-                console.log(result);
-            });
+            if(state.messagesPool[to]){
+                commit('updateMessagesMutation',{target:to,messages:state.messagesPool[to]});
+                return Promise.resolve();
+            }else{
+                return Promise.all([
+                    messageService.loadHistoryMessages(from,to),
+                    messageService.loadUnreadMessagesFromMe(from, to),
+                    messageService.loadUnreadMessagesToMe(from, to)
+                ]).then((result)=>{
+                    //console.log(result);
+                    let messages = [];
+                    for (let i = 0; i < result.length; i++) {
+                        const r = result[i];
+                        const msg = r.data;
+                        messages = messages.concat(msg);
+                    }
+                    messages.sort((a,b)=>{
+                        if(a.time < b.time){
+                            return -1;
+                        }
+                        if(a.time >= b.time){
+                            return 1;
+                        }
+                    })
+                    commit('updateMessagesMutation',{target:to,messages:messages});
+                });
+            }
+            
         }
        
     },
 
     mutations:{
         appendMessagesMutation(state,{target,messages}){
-            if(!state.messagesPool[target]){
-                state.messagesPool[target] = [];
-            }
-            let oldMessages = state.messagesPool[target];
             for(let i=0;i<messages.length;i++){
-                oldMessages.push(messages[i]);
+                state.messagesPool[target].push(messages[i]);
+                //state.currentMessages.push(messages[i]);
             }
         },
+        updateMessagesMutation(state, {target, messages}){
+            // Vue.set(state.messagesPool, target, messages)
+            state.messagesPool[target] = messages;
+            state.currentMessages = messages;
+        }
     }
 }

@@ -1,5 +1,5 @@
 import authService from '@/services/authService';
-
+import Vue from 'vue';
 export default {
     state:{
         currentUser:{},
@@ -25,11 +25,15 @@ export default {
         login({commit}, {username,password}){
             authService.login(username,password).then((result)=>{
                 const user = result.data;
+                Vue.prototype.$socket.emit('login',{username: user.username});
                 commit('setCurrentUserMutation',user);
             });
         },
         setCurrentTarget({commit}, payload){
             commit('setCurrentTargetMutation',payload);
+            this.dispatch('loadMessages').then(()=>{
+                
+            });
         }
     },
 
