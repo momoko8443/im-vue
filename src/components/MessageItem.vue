@@ -1,7 +1,21 @@
 <template>
-    <div :class="['hbox','messageItem', isYou ? 'right':'left']">
-        <a-avatar shape="square" size="large" icon="user"></a-avatar>
-        <span class="messageBody">{{message.content}}</span>
+    <div class="hbox messageItem left">
+        <div class="hbox">
+            <a-avatar shape="square" size="large" icon="user"></a-avatar>
+            <div class="vbox">
+                <div class="hbox">
+                    <span class="talkerLabel">{{message.from}}</span>
+                    <span class="timeLabel">{{message.time}}</span>
+                </div>
+                <span class="messageBody">{{message.content}}</span>
+            </div>
+            
+             
+             <!--  -->
+             
+        </div>
+        
+       
     </div>
 </template>
 <script>
@@ -35,6 +49,7 @@ export default {
     .messageBody{
         padding-left: 10px;
         padding-right: 10px;
+        text-align: left;
     }
     .talker{
         /* font-size: 14px;
@@ -44,6 +59,15 @@ export default {
         border-radius: 50%;
         background: yellowgreen;
         line-height:50px;
+    }
+    .talkerLabel{
+        font-weight: bold;
+        font-size: 16px;
+        padding-left: 10px;
+    }
+    .timeLabel{
+        color: grey;
+        padding-left: 10px;
     }
     .left{
         flex-direction: row;

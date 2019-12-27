@@ -32,6 +32,10 @@ html body{
 .hbox{
     display: flex;
 }
+.vbox{
+    display: flex;
+    flex-direction: column;
+}
 .item{
     color: white;
     height: 40px;

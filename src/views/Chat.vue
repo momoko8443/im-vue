@@ -3,9 +3,9 @@
     <a-layout style="height:100%">
       <a-layout-sider>
         <h3 class="title">Friends</h3>
-        <TargetsList :targets="friendsList"></TargetsList>
+        <TargetsList :targets="friendsList" :isGroup="false"></TargetsList>
         <h3 class="title">Groups</h3>
-       <TargetsList :targets="groupsList"></TargetsList>
+       <TargetsList :targets="groupsList" :isGroup="true"></TargetsList>
       </a-layout-sider>
       <a-layout>
         <a-layout-header>
@@ -48,7 +48,10 @@ export default {
           
         // },500);
         vm.$nextTick(()=>{
-          vm.$refs['conversationView'].$el.scrollTop = vm.$refs['conversationView'].$el.clientHeight + 100;
+          vm.$refs['conversationView'].$el.scrollTop = vm.$refs['conversationView'].$el.clientHeight + 9999;
+          vm.markHasRead().then(()=>{
+
+          });
         });
         
     });
@@ -66,17 +69,19 @@ export default {
     }
   },
   methods:{
-    ...mapActions(['loadMessages','receiveMessage']),
+    ...mapActions(['loadMessages','receiveMessage','markHasRead']),
     sendMessageSuccessHandler(){
       this.$nextTick(()=>{
-          this.$refs['conversationView'].$el.scrollTop = this.$refs['conversationView'].$el.clientHeight + 100;
+          this.$refs['conversationView'].$el.scrollTop = this.$refs['conversationView'].$el.clientHeight + 9999;
         });
     }
   },
   watch:{
     hasCurrentTarget(val){
       if(val){
-        this.loadMessages();
+        this.loadMessages().then(()=>{
+          return this.markHasRead().then(()=>{})
+        });
       }
     }
   }

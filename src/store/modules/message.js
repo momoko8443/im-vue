@@ -1,5 +1,4 @@
 import messageService from '@/services/messageService';
-import Vue from 'vue';
 export default {
     state:{
         messagesPool:{},
@@ -14,15 +13,23 @@ export default {
     },
 
     actions:{
-        receiveMessage({commit, rootState}, content){
+        markHasRead({rootState}){
+            let from = rootState.user.currentUser.username;
+            let to = rootState.user.currentTarget.name;
+            return messageService.markHasRead(from, to);
+        },
+        receiveMessage({commit, rootState}, {from,message}){
             //let from = rootState.user.currentUser.username;
             let to = rootState.user.currentTarget.name;
-            commit('appendMessagesMutation',{target:to,messages:[content]});
+            if(from === to){
+                commit('appendMessagesMutation',{target:to,messages:[message]});
+            }
         },
         sendMessage({commit,rootState}, content){
             let from = rootState.user.currentUser.username;
             let to = rootState.user.currentTarget.name;
-            return messageService.sendMessage(from,to,content).then((result)=>{
+            let isGroup = rootState.user.currentTarget.isGroup;
+            return messageService.sendMessage(from,to,content,isGroup).then((result)=>{
                 if(result.data){
                     let sentMsg = result.data;
                     commit('appendMessagesMutation',{target:to,messages:[sentMsg]});

@@ -1,9 +1,10 @@
 import axios from 'axios';
-function sendMessage(from,to,content){
+function sendMessage(from,to,content,isGroup){
     return axios.post('/api/messages',{
         from:from,
         to:to,
-        content:content
+        content:content,
+        isGroup: isGroup
     });
 }
 
