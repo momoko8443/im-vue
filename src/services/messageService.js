@@ -1,6 +1,7 @@
 import axios from 'axios';
+const domain = process.env.VUE_APP_API_SERVER;
 function sendMessage(from,to,content,isGroup){
-    return axios.post('/api/messages',{
+    return axios.post(domain + '/api/messages',{
         from:from,
         to:to,
         content:content,
@@ -9,7 +10,7 @@ function sendMessage(from,to,content,isGroup){
 }
 
 function loadUnreadMessagesFromMe(me, target){
-    return axios.get('/api/messages/unread',{
+    return axios.get(domain + '/api/messages/unread',{
         params:{
             from:me,
             to: target
@@ -18,7 +19,7 @@ function loadUnreadMessagesFromMe(me, target){
 }
 
 function loadUnreadMessagesToMe(me, target){
-    return axios.get('/api/messages/unread',{
+    return axios.get(domain + '/api/messages/unread',{
         params:{
             from:target,
             to: me
@@ -27,7 +28,7 @@ function loadUnreadMessagesToMe(me, target){
 }
 
 function markHasRead(me, target){
-    return axios.delete('/api/messages/unread',{
+    return axios.delete(domain + '/api/messages/unread',{
         params:{
             from:target,
             to: me
@@ -36,7 +37,7 @@ function markHasRead(me, target){
 }
 
 function loadHistoryMessages(me, target){
-    return axios.get('/api/messages',{
+    return axios.get(domain + '/api/messages',{
         params:{
             from:target,
             to: me

@@ -6,7 +6,8 @@ import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 import store from './store';
 import io from 'socket.io-client';
-const socket = io('http://localhost:3000');
+const socket_domain = process.env.VUE_APP_SOCKET_SERVER;
+const socket = io(socket_domain);
 Object.defineProperty(Vue.prototype, '$socket', { value:  socket });
 Vue.config.productionTip = false
 Vue.use(Antd);
