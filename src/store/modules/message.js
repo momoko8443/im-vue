@@ -20,10 +20,11 @@ export default {
         },
         receiveMessage({commit, rootState}, {from,message}){
             //let from = rootState.user.currentUser.username;
-            let to = rootState.user.currentTarget.name;
-            if(from === to){
-                commit('appendMessagesMutation',{target:to,messages:[message]});
-            }
+            // let to = rootState.user.currentTarget.name;
+            // if(from === to){
+            //     commit('appendMessagesMutation',{target:to,messages:[message]});
+            // }
+            commit('appendMessagesMutation',{target:from,messages:[message]});
         },
         sendMessage({commit,rootState}, content){
             let from = rootState.user.currentUser.username;
